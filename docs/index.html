@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>llychao.github.io</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Description">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="//ued.zuoyebang.cc/documents/__static__/css/vue.css">
+  <link rel="stylesheet" href="./style.css">
+  <script>
+    // 清除首页缓存
+    if (!sessionStorage.getItem('refresh')) {
+      sessionStorage.setItem('refresh', 'true');
+      window.location.reload(true);
+    }
+  </script>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script>
+    window.$docsify = {
+      // 左上角文档名
+      name: '一些笔记、一些感悟',
+      // 右上角git地址
+      repo: 'https://github.com/llychao/llychao',
+      // 侧边栏渲染等级
+      maxLevel: 2,
+      // 封面
+      // coverpage: 'cover.md',
+
+      //配置侧边栏
+      loadSidebar: true,
+      subMaxLevel: 3,
+
+      // 切页后自动到顶
+      auto2top: true,
+
+      // 切页
+      pagination: {
+        previousText: '上一个',
+        nextText: '下一个',
+        crossChapter: true
+      },
+
+      // 搜索
+      search: 'auto',
+      requestHeaders: {
+        'Cache-Control': 'max-age=0',
+      },
+    }
+  </script>
+  <script src="//ued.zuoyebang.cc/documents/__static__/js/docsify.min.js"></script>
+  <script src="//ued.zuoyebang.cc/documents/__static__/js/docsify-search.js"></script>
+  <script src="//ued.zuoyebang.cc/documents/__static__/js/docsify-copy-code.js"></script>
+  <script src="//ued.zuoyebang.cc/documents/__static__/js/docsify-pagination.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/prism/1.15.0/components/prism-bash.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/prism/1.15.0/components/prism-php.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/prism/1.15.0/components/prism-json.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/prism/1.15.0/components/prism-go.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/prism/1.15.0/components/prism-python.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/prism/1.15.0/components/prism-docker.min.js"></script>
+</body>
+
+</html>
