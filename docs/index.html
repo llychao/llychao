@@ -9,7 +9,7 @@
   <meta name="viewport"
     content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify/themes/vue.css">
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./static/style.css">
   <script>
     // 清除首页缓存
     if (!sessionStorage.getItem('refresh')) {
@@ -33,7 +33,7 @@
       // coverpage: 'cover.md',
 
       //配置侧边栏
-      loadSidebar: true,
+      loadSidebar: 'sidebar.md',
       subMaxLevel: 3,
 
       // 切页后自动到顶
@@ -55,7 +55,7 @@
   </script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code"></script>
+  <script src="./static/docsify-copy-code.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
   <script src="https://cdn.bootcdn.net/ajax/libs/prism/1.15.0/components/prism-bash.min.js"></script>
   <script src="https://cdn.bootcdn.net/ajax/libs/prism/1.15.0/components/prism-php.min.js"></script>
