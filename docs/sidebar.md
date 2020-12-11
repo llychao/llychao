@@ -1,5 +1,6 @@
 - [golang]()
     * [浅析 go channel](golang/go_channel.md)
     * [浅析 go sync](golang/go_sync.md)
-- [随笔]()
-    * [浅笑那悲伤]()
+- [leetcode]()
+    * [单调栈](leetcode/单调栈.md)
+    * [贪心算法](leetcode/贪心算法.md)
