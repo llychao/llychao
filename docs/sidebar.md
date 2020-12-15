@@ -2,5 +2,7 @@
     * [浅析 go channel](golang/go_channel.md)
     * [浅析 go sync](golang/go_sync.md)
 - [leetcode]()
+    * [排序](leetcode/排序.md)
     * [单调栈](leetcode/单调栈.md)
     * [贪心算法](leetcode/贪心算法.md)
+    * [动态规划](leetcode/动态规划.md)
