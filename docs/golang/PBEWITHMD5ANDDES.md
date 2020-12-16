@@ -1,6 +1,8 @@
-## PBEWITHMD5ANDDES
+# PBEWITHMD5ANDDES
 
-```golang
+做个记录，用于和java程序的加解密算法对接
+
+```go
 import (
     "strings"
     "encoding/base64"
