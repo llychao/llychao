@@ -1,6 +1,7 @@
 - [golang]()
     * [浅析 go channel](golang/go_channel.md)
     * [浅析 go sync](golang/go_sync.md)
+    * [PBEWITHMD5ANDDES加解密](golang/PBEWITHMD5ANDDES.md)
 - [leetcode]()
     * [排序](leetcode/排序.md)
     * [单调栈](leetcode/单调栈.md)
