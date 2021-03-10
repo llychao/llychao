@@ -150,5 +150,140 @@ func WithTimeout(parent Context, timeout time.Duration) (Context, CancelFunc) {
 ### Go标准库Context使用demo: 
     https://www.liwenzhou.com/posts/Go/go_context/
 
+### 怎么并发控制
+
+控制并发主要包括两种方式：一种是WaitGroup，另外一种是Context。
+
+WaitGroup是一种控制多个goroutine并发执行的方式
+```go
+var wg sync.WaitGroup
+
+func service1()  {
+    time.Sleep(2*time.Second)
+    fmt.Println("service1 done")
+    wg.Done()
+}
+
+func service2()  {
+    time.Sleep(2*time.Second)
+    fmt.Println("service2 done")
+    wg.Done()
+}
+
+func main() {
+    wg.Add(2)
+    go service1()
+    go service2()
+    wg.Wait()
+    fmt.Println("all done")
+}
+```
+
+上面的例子是协程内自己处理结束后调用wg.Done退出，实际使用中我们可能需要从外部去结束一个协程。不然它会一直跑，就泄漏了。
+
+如何从外部去结束一个goroutine，很容易想到的一个方法就是定义一个全局变量，然后再外部修改这个变量的值，goroutine不断的轮训这个变量是否改变。
+
+这种方式也可以，但是首先我们要保证这个变量在多线程下的安全，基于此，有一种更好的方式：channel + select
+
+```go
+func testChannel() {
+    stop := make(chan bool)
+
+    go func() {
+        for {
+            select {
+            case <-stop:
+                fmt.Println("goroutine done")
+                return
+            default:
+                fmt.Println("goroutine is running")
+                time.Sleep(2 * time.Second)
+            }
+        }
+    }()
+
+    time.Sleep(10 * time.Second)
+    fmt.Println("cancel goroutine")
+    stop<- true
+    //为了检测监控过是否停止，如果没有监控输出，就表示停止了
+    time.Sleep(5 * time.Second)
+}
+```
+
+这种方式也有局限性，如果有很多goroutine都需要控制结束怎么办呢？如果这些goroutine又衍生了其他更多的goroutine怎么办呢？如果一层层的无穷尽的goroutine呢？这就非常复杂了，即使我们定义很多chan也很难解决这个问题，因为goroutine的关系链就导致了这种场景非常复杂。
+
+context可以很好的解决上面的问题。下面用context的方式改写上面的例子。
+
+```go
+func testContext() {
+    ctx, cancel := context.WithCancel(context.Background())
+    go func(ctx context.Context) {
+        for {
+            select {
+            case <-ctx.Done():
+                fmt.Println("goroutine done")
+                return
+            default:
+                fmt.Println("goroutine is running")
+                time.Sleep(2 * time.Second)
+            }
+        }
+    }(ctx)
+
+    time.Sleep(10 * time.Second)
+    fmt.Println("cancel goroutine")
+    cancel()
+    //为了检测监控过是否停止，如果没有监控输出，就表示停止了
+    time.Sleep(5 * time.Second)
+}
+```
+
+context.Background() 返回一个空的Context，这个空的Context一般用于整个Context树的根节点。然后我们使用context.WithCancel(parent)函数，创建一个可取消的子Context，然后当作参数传给goroutine使用，这样就可以使用这个子Context跟踪这个goroutine。
+
+在goroutine中，使用select调用<-ctx.Done()判断是否要结束，如果接受到值的话，就可以返回结束goroutine了；如果接收不到，就会继续进行监控。
+
+那么是如何发送结束指令的呢？这就是示例中的cancel函数啦，它是我们调用context.WithCancel(parent)函数生成子Context的时候返回的，第二个返回值就是这个取消函数，它是CancelFunc类型的。我们调用它就可以发出取消指令，然后我们的监控goroutine就会收到信号，就会返回结束。
+
+Context控制多个goroutine
+
+```go
+func testMultiContext() {
+    ctx, cancel := context.WithCancel(context.Background())
+    go watch(ctx, "watch1")
+    go watch(ctx, "watch2")
+
+    time.Sleep(10 * time.Second)
+    fmt.Println("cancel all goroutine")
+    cancel()
+    //为了检测监控过是否停止，如果没有监控输出，就表示停止了
+    time.Sleep(5 * time.Second)
+}
+
+func watch(ctx context.Context, name string)  {
+    for {
+        select {
+        case <-ctx.Done():
+            fmt.Println(name," is done")
+            return
+        default:
+            fmt.Println(name," is running")
+            time.Sleep(2 * time.Second)
+        }
+    }
+}
+```
+
+### Context 使用原则
+- 不要把Context放在结构体中，要以参数的方式传递
+- 以Context作为参数的函数方法，应该把Context作为第一个参数，放在第一位。
+- 给一个函数方法传递Context的时候，不要传递nil，如果不知道传递什么，就使用context.TODO
+- Context的Value相关方法应该传递必须的数据，不要什么数据都使用这个传递
+- Context是线程安全的，可以放心的在多个goroutine中传递
+
+
+
+
+
+
 
 
