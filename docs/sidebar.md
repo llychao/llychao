@@ -11,5 +11,4 @@
     * [PBEWITHMD5ANDDES加解密](golang/PBEWITHMD5ANDDES.md)
 
 - [随笔]()
-    * [2021面试](other/2021面试.md)
     * [临时](other/临时.md)
